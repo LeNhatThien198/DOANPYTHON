@@ -114,22 +114,6 @@ pygame.mixer.music.load('audio/Flappy Bird Theme Song.mp3')
 pygame.mixer.music.play(loops=-1, start=0.0)
 # Khởi tạo danh sách ống đã được tính điểm
 scored_pipes = [] 
-# Tạo nút Start
-start_button = pygame.Rect(132, 300, 168, 80)  # Vị trí và kích thước nút Start
-start_button_color = (0, 255, 0)  # Màu sắc nút (xanh lá)
-start_button_text = game_font.render('START', True, (255, 255, 255))  # Văn bản "START"
-
-def draw_start_screen():
-    screen.blit(bg, (0, 0))  # Vẽ background
-    screen.blit(start_button_text, (start_button.x + 40, start_button.y + 25))  # Vẽ chữ START
-    pygame.draw.rect(screen, start_button_color, start_button)  # Vẽ nút Start
-
-# Hàm kiểm tra nút Start
-def check_start_button_click(pos):
-    global game_active
-    if start_button.collidepoint(pos):
-        game_active = True
-        pygame.mixer.music.play(loops=-1, start=0.0)  # Bắt đầu nhạc nền khi bắt đầu game
 
 #while loop của trò chơi
 while True:
