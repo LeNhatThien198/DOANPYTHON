@@ -114,6 +114,7 @@ pygame.mixer.music.load('audio/Flappy Bird Theme Song.mp3')
 pygame.mixer.music.play(loops=-1, start=0.0)
 # Khởi tạo danh sách ống đã được tính điểm
 scored_pipes = [] 
+game_started = False
 
 #while loop của trò chơi
 while True:
@@ -122,32 +123,50 @@ while True:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN: 
-            if event.key == pygame.K_SPACE and game_active:
-                bird_movement = 0
-                bird_movement =-6
-                flap_sound.play()
-                swoosh_sound.play()
             if event.key == pygame.K_SPACE and game_active==False:
+                game_started = True
                 game_active = True 
                 pipe_list.clear() # Xóa tất cả các đường ống trong pipe_list khi bắt đầu lại trò chơi
                 bird_rect.center = (100,384)
                 bird_movement = 0 
                 score = 0
                 pygame.mixer.music.play(loops=-1, start=0.0)
+            elif event.key == pygame.K_SPACE and game_active:
+                bird_movement = 0
+                bird_movement =-6
+                flap_sound.play()
+                swoosh_sound.play()
+            elif event.key == pygame.K_SPACE and not game_active and game_started:
+                # Trò chơi kết thúc và bắt đầu lại
+                game_active = True
+                pipe_list.clear() # Xóa tất cả các đường ống
+                bird_rect.center = (100, 384)
+                bird_movement = 0
+                score = 0
+                pygame.mixer.music.play(loops=-1, start=0.0)
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # Nếu là chuột trái
-                if game_active:
-                    bird_movement = -6 # Chim đập cánh
-                    flap_sound.play()
-                    swoosh_sound.play()
-                else: 
+                if not game_started:
+                    # Bắt đầu trò chơi
+                    game_started = True
                     game_active = True
                     pipe_list.clear()  # Xóa tất cả các đường ống trong pipe_list khi bắt đầu lại trò chơi
                     bird_rect.center = (100, 384)  # Đặt lại vị trí cho chim
                     bird_movement = 0  # Đặt lại chuyển động cho chim
                     score = 0 
                     pygame.mixer.music.play(loops=-1, start=0.0)
-        if event.type == spawnpipe:
+                elif game_active:
+                    bird_movement = -6 # Chim đập cánh
+                    flap_sound.play()
+                    swoosh_sound.play()
+                elif not game_active and game_started:
+                    game_active = True
+                    pipe_list.clear()
+                    bird_rect.center = (100, 384)
+                    bird_movement = 0
+                    score = 0
+                    pygame.mixer.music.play(loops=-1, start=0.0)
+        if event.type == spawnpipe and game_started:
             pipe_list.extend(create_pipe())
         if event.type == birdflap:
             if bird_index < 2:
@@ -155,26 +174,33 @@ while True:
             else:
                 bird_index =0 
             bird, bird_rect = bird_animation()    
-                         
-    screen.blit(bg,(0,0))
-    if game_active:
-        #chim
-        bird_movement += gravity
-        rotated_bird = rotate_bird(bird)       
-        bird_rect.centery += bird_movement
-        screen.blit(rotated_bird,bird_rect)
-        game_active= check_collision(pipe_list)
-        #ống
-        pipe_list = move_pipe(pipe_list)
-        pipe_list = remove_pipes(pipe_list)
-        draw_pipe(pipe_list)
-        score += update_score_on_pipe(pipe_list, bird_rect)
-        score_display('main game')
-    else:
-        screen.blit(game_over_surface,game_over_rect)
-        high_score = update_score(score,high_score)
+    if not game_started:                  
+        screen.blit(bg,(0,0))
+        rotated_bird = rotate_bird(bird)
+        screen.blit(rotated_bird, bird_rect)
+        screen.blit(game_over_surface, game_over_rect)  # Hiển thị màn hình chờ
         score_display('game_over')
-        pygame.mixer.music.stop()
+    else:
+        # Nếu trò chơi đã bắt đầu
+        screen.blit(bg, (0, 0))
+        if game_active:
+            # Chim rơi tự nhiên hoặc bay
+            bird_movement += gravity
+            rotated_bird = rotate_bird(bird)       
+            bird_rect.centery += bird_movement
+            screen.blit(rotated_bird,bird_rect)
+            game_active= check_collision(pipe_list)
+            #ống
+            pipe_list = move_pipe(pipe_list)
+            pipe_list = remove_pipes(pipe_list)
+            draw_pipe(pipe_list)
+            score += update_score_on_pipe(pipe_list, bird_rect)
+            score_display('main game')
+        else:
+            screen.blit(game_over_surface,game_over_rect)
+            high_score = update_score(score,high_score)
+            score_display('game_over')
+            pygame.mixer.music.stop()
         
 
        
