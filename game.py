@@ -160,7 +160,8 @@ while True:
                     score = 0 
                     pygame.mixer.music.play(loops=-1, start=0.0)
                 elif game_active:
-                    bird_movement = -6 # Chim đập cánh
+		    bird_movement = 0                    
+		    bird_movement = -6 # Chim đập cánh
                     flap_sound.play()
                     swoosh_sound.play()
                 elif not game_active and game_started:
