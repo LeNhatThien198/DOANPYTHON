@@ -159,8 +159,7 @@ while True:
                     bird_movement = 0  # Đặt lại chuyển động cho chim
                     score = 0 
                     pygame.mixer.music.play(loops=-1, start=0.0)
-                elif game_active:
-		    bird_movement = 0                    
+                elif game_active:                    
 		    bird_movement = -6 # Chim đập cánh
                     flap_sound.play()
                     swoosh_sound.play()
