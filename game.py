@@ -65,17 +65,17 @@ def update_score_on_pipe(pipes, bird):
     
 pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=512)
 pygame.init()
-pygame.display.set_caption("Flappy Bird Game")
 screen= pygame.display.set_mode((432,768))
+pygame.display.set_caption("Flappy Bird Game")
 clock = pygame.time.Clock()
 game_font = pygame.font.Font('04B_19.ttf',35)
 #Tạo các biến cho trò chơi
-gravity = 0.20
-bird_movement = 0
-game_active = True
-score = 0
-high_score = 0
-game_started = False
+gravity = 0.20 #Lực hấp dẫn, tạo ra sự rơi của chim
+bird_movement = 0 #Vị trí khi chim được khởi tạo là mặc định, chưa thay đổi
+game_active = True #Xác định trò chơi có đang hoạt động không
+score = 0 #Điểm số hiện tại
+high_score = 0 #Điểm cao nhất, mặc định là 0 nếu chưa có thay đổi
+game_started = False #Trạng thái game đã bắt đầu hay chưa, mặc định là chưa, người chơi sẽ phải thao tác để bắt đầu
 #chèn background
 bg = pygame.image.load('assets/background-day.png').convert()
 bg = pygame.transform.scale2x(bg)
@@ -87,22 +87,21 @@ base_x_pos = 0
 bird_down = pygame.transform.scale2x(pygame.image.load('assets/downflap.png').convert_alpha())
 bird_mid = pygame.transform.scale2x(pygame.image.load('assets/midflap.png').convert_alpha())
 bird_up = pygame.transform.scale2x(pygame.image.load('assets/upflap.png').convert_alpha())
-bird_list= [bird_down,bird_mid,bird_up] #0 1 2
-bird_index = 0
-bird = bird_list[bird_index]
+bird_list= [bird_down,bird_mid,bird_up] #Danh sách hoạt ảnh của chim, lần lượt là 0, 1, 2
+bird_index = 0 
+bird = bird_list[bird_index] #Chọn hình ảnh của chim dựa trên giá trị của bird_index. Lúc này, bird_index = 0, nên bird sẽ là bird_down (chim đang rơi xuống).
 bird_rect = bird.get_rect(center = (100,384))
-
-#tạo timer cho bird
-birdflap = pygame.USEREVENT + 1
-pygame.time.set_timer(birdflap,300)
+#tạo timer cho chim
+birdflap = pygame.USEREVENT + 1  #Đặt một sự kiện người dùng mới với ID là USEREVENT + 1 cho việc đập cánh của chim
+pygame.time.set_timer(birdflap,300) #Tạo một timer sẽ kích hoạt sự kiện birdflap mỗi 0.3 giây. Điều này giúp chim đập cánh đều đặn
 #tạo ống
 pipe_surface = pygame.image.load('assets/pipe-green.png').convert()
 pipe_surface = pygame.transform.scale2x(pipe_surface)
-pipe_list =[]
-#tạo timer
+pipe_list =[] #Một danh sách sẽ lưu trữ các ống
+#tạo timer xuất hiện ống 
 spawnpipe= pygame.USEREVENT
-pygame.time.set_timer(spawnpipe, 1500)
-pipe_height = [200,300,400]
+pygame.time.set_timer(spawnpipe, 1500) #Qua mỗi 1.5 giây, một ống mới được tạo ra
+pipe_height = [200,300,400] #Danh sách các chiều cao khác nhau của các ống
 #Tạo màn hình đầu game
 startscreen = pygame.transform.scale2x(pygame.image.load('assets/start_message.png').convert_alpha())
 startscreen_rect = startscreen.get_rect(center=(216,289))
@@ -115,8 +114,8 @@ swoosh_sound = pygame.mixer.Sound('audio/swoosh.wav')
 hit_sound = pygame.mixer.Sound('audio/hit.wav')
 score_sound = pygame.mixer.Sound('audio/point.wav')
 # Chèn nhạc nền
-pygame.mixer.music.load('audio/Flappy Bird Theme Song.mp3') 
-pygame.mixer.music.play(loops=-1, start=0.0)
+pygame.mixer.music.load('audio/Flappy Bird Theme Song.mp3')
+pygame.mixer.music.play(loops=-1, start=0.0) #Sẽ phát nhạc từ đầu và lặp lại nó mãi mãi trong khi game đang chạy.
 # Khởi tạo danh sách ống đã được tính điểm
 scored_pipes = [] 
 
@@ -159,10 +158,11 @@ while True:
                     bird_movement = 0  # Đặt lại chuyển động cho chim
                     score = 0 
                     pygame.mixer.music.play(loops=-1, start=0.0)
-                elif game_active:                    
-		    bird_movement = -6 # Chim đập cánh
+                elif game_active:
+                    bird_movement = 0
+                    bird_movement =-6
                     flap_sound.play()
-                    swoosh_sound.play()
+                    swoosh_sound.play()                    	            
                 elif not game_active and game_started:
                     game_active = True
                     pipe_list.clear()
