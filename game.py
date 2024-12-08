@@ -6,8 +6,8 @@ def draw_base():
 def create_pipe():
     random_pipe_pos = random.choice(pipe_height)
     gap_size = 680
-    bottom_pipe = pipe_surface.get_rect(midtop =(500,random_pipe_pos))
-    top_pipe = pipe_surface.get_rect(midtop =(500,random_pipe_pos-gap_size))
+    bottom_pipe = pipe_surface.get_rect(midtop =(500,random_pipe_pos)) #Tạo đối tượng hình chữ nhật(rect) cho ống dưới
+    top_pipe = pipe_surface.get_rect(midtop =(500,random_pipe_pos-gap_size)) #Tạo đối tượng hình chữ nhật(rect) cho ống trên
     return bottom_pipe, top_pipe
 def move_pipe(pipes):
 	for pipe in pipes :
