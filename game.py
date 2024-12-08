@@ -211,10 +211,10 @@ while True:
         
        
     #sàn
-    base_x_pos -= 1
-    draw_base()
-    if base_x_pos <= -432:
-        base_x_pos =0
+    base_x_pos -= 1 # Di chuyển sàn sang trái
+    draw_base() # Vẽ lại sàn
+    if base_x_pos <= -432: # Nếu sàn đã ra ngoài màn hình
+        base_x_pos =0 # Đặt lại vị trí sàn về ban đầu
     
-    pygame.display.update()
+    pygame.display.update() # Cập nhật màn hình sau mỗi lần vẽ
     clock.tick(85)
