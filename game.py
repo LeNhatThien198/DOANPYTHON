@@ -3,6 +3,13 @@ import pygame, sys, random
 def draw_base():
     screen.blit(base,(base_x_pos,650))
     screen.blit(base,(base_x_pos+432,650))
+def draw_pipe(pipes):
+    for pipe in pipes:
+        if pipe.bottom >= 600 : 
+            screen.blit(pipe_surface,pipe)
+        else:
+            flip_pipe = pygame.transform.flip(pipe_surface,False,True)
+            screen.blit(flip_pipe,pipe)
 def create_pipe():
     random_pipe_pos = random.choice(pipe_height)
     gap_size = 680
@@ -13,15 +20,8 @@ def move_pipe(pipes):
 	for pipe in pipes :
 		pipe.centerx -= 5
 	return pipes
-def remove_pipes(pipes): #xoá các ông không còn trong khung hình: Xóa để tránh lãng phí bộ nhớ
+def remove_pipe(pipes): #xoá các ông không còn trong khung hình: Xóa để tránh lãng phí bộ nhớ
     return [pipe for pipe in pipes if pipe.right > 0]
-def draw_pipe(pipes):
-    for pipe in pipes:
-        if pipe.bottom >= 600 : 
-            screen.blit(pipe_surface,pipe)
-        else:
-            flip_pipe = pygame.transform.flip(pipe_surface,False,True)
-            screen.blit(flip_pipe,pipe)
 def check_collision(pipes):
     for pipe in pipes:
         if bird_rect.colliderect(pipe):
@@ -184,7 +184,6 @@ while True:
         screen.blit(rotated_bird, bird_rect.move(118,0))
         screen.blit(startscreen, startscreen_rect)  # Hiển thị màn hình đầu game
     else:
-        # Nếu trò chơi đã bắt đầu
         screen.blit(bg, (0, 0))
         if game_active:
             # Chim rơi tự nhiên hoặc bay
@@ -195,7 +194,7 @@ while True:
             game_active= check_collision(pipe_list)
             #ống
             pipe_list = move_pipe(pipe_list)
-            pipe_list = remove_pipes(pipe_list)
+            pipe_list = remove_pipe(pipe_list)
             draw_pipe(pipe_list)
             score += update_score_on_pipe(pipe_list, bird_rect)
             score_display('main game')
@@ -208,8 +207,6 @@ while True:
             high_score = update_score(score,high_score)
             score_display('game_over')
             pygame.mixer.music.stop()
-        
-       
     #sàn
     base_x_pos -= 1 # Di chuyển sàn sang trái
     draw_base() # Vẽ lại sàn
