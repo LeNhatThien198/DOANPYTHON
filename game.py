@@ -126,7 +126,7 @@ while True:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN: 
-            if event.key == pygame.K_SPACE and game_started==False:
+            if event.key == pygame.K_SPACE and game_started==False: #Trò chơi chưa bắt đầu
                 game_started = True
                 game_active = True 
                 pipe_list.clear() # Xóa tất cả các đường ống trong pipe_list khi bắt đầu lại trò chơi
@@ -134,12 +134,12 @@ while True:
                 bird_movement = 0 
                 score = 0
                 pygame.mixer.music.play(loops=-1, start=0.0)
-            elif event.key == pygame.K_SPACE and game_active:
+            elif event.key == pygame.K_SPACE and game_active: #Trò chơi đã bắt đầu
                 bird_movement = 0
                 bird_movement =-6
                 flap_sound.play()
                 swoosh_sound.play()
-            elif event.key == pygame.K_SPACE and not game_active and game_started:
+            elif event.key == pygame.K_SPACE and not game_active and game_started: #Trò chơi kết thúc
                 # Trò chơi kết thúc và bắt đầu lại
                 game_active = True
                 pipe_list.clear() # Xóa tất cả các đường ống
@@ -149,7 +149,7 @@ while True:
                 pygame.mixer.music.play(loops=-1, start=0.0)
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # Nếu là chuột trái
-                if not game_started:
+                if not game_started: #Trò chơi chưa bắt đầu
                     # Bắt đầu trò chơi
                     game_started = True
                     game_active = True
@@ -158,12 +158,12 @@ while True:
                     bird_movement = 0  # Đặt lại chuyển động cho chim
                     score = 0 
                     pygame.mixer.music.play(loops=-1, start=0.0)
-                elif game_active:
+                elif game_active: #Trò chơi đã bắt đầu
                     bird_movement = 0
                     bird_movement =-6
                     flap_sound.play()
                     swoosh_sound.play()                    	            
-                elif not game_active and game_started:
+                elif not game_active and game_started: #Trò chơi kết thúc
                     game_active = True
                     pipe_list.clear()
                     bird_rect.center = (100, 384)
